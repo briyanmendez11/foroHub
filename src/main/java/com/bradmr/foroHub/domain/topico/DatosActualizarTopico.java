@@ -1,4 +1,15 @@
 package com.bradmr.foroHub.domain.topico;
 
-public class DatosActualizarTopico {
+import jakarta.validation.constraints.NotNull;
+
+public record DatosActualizarTopico(
+        @NotNull
+        Long id,
+        String titulo,
+        String mensaje,
+        String curso
+) {
+
+
+
 }

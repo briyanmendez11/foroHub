@@ -1,10 +1,8 @@
 package com.bradmr.foroHub.controller;
 
-import com.bradmr.foroHub.domain.topico.DatosDetalleTopico;
-import com.bradmr.foroHub.domain.topico.DatosListadoTopico;
-import com.bradmr.foroHub.domain.topico.Topico;
-import com.bradmr.foroHub.domain.topico.TopicoRepository;
+import com.bradmr.foroHub.domain.topico.*;
 import com.bradmr.foroHub.domain.usuario.Usuario;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -73,4 +71,25 @@ public class TopicoController {
 
         return ResponseEntity.ok(datos);
     }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity actualizar(@RequestBody @Valid DatosActualizarTopico datos){
+
+        var topico = topicoRepository.getReferenceById(datos.id());
+
+        topico.actualizarDatos(datos);
+        return ResponseEntity.ok(new DatosDetalleTopico(topico));
+
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity eliminar(@PathVariable Long id){
+
+        var topico = topicoRepository.getReferenceById(id);
+        topico.eliminar();
+        return ResponseEntity.noContent().build();
+    }
+
 }

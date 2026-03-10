@@ -29,4 +29,24 @@ public class Topico {
     private Usuario usuario;
 
     private String curso;
+
+
+    public void actualizarDatos(DatosActualizarTopico datos){
+
+        if (datos.titulo() != null){
+            this.titulo = datos.titulo();
+        }
+        if (datos.mensaje() != null){
+            this.mensaje = datos.mensaje();
+        }
+        if (datos.curso() != null){
+            this.curso = datos.curso();
+        }
+
+    }
+
+    public  void eliminar(){
+        this.status = "ELIMINADO";
+    }
+
 }
