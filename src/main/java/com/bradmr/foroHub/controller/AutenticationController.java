@@ -3,6 +3,7 @@ package com.bradmr.foroHub.controller;
 import com.bradmr.foroHub.domain.usuario.DatosAutenticacionUsuario;
 import com.bradmr.foroHub.domain.usuario.Usuario;
 import com.bradmr.foroHub.infra.security.DatosJWTToken;
+import com.bradmr.foroHub.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,9 +18,12 @@ public class AutenticationController {
 
     private final AuthenticationManager authenticationManager;
 
+    private final TokenService tokenService;
 
-    public AutenticationController(AuthenticationManager authenticationManager) {
+
+    public AutenticationController(AuthenticationManager authenticationManager, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     @PostMapping
@@ -30,7 +34,11 @@ public class AutenticationController {
         );
         var autenticacion = authenticationManager.authenticate(authToken);
 
-        return new DatosJWTToken("token-temporal");
+        var usuario = (Usuario) autenticacion.getPrincipal();
+
+        var jwtToken = tokenService.generarToken(usuario);
+
+        return new DatosJWTToken(jwtToken);
     }
 
 }
